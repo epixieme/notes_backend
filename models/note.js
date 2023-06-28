@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI
+mongoose.set('strictQuery', false)
 
+const url = process.env.MONGODB_URL
 
-mongoose.set('strictQuery',false)
+console.log('connecting to', url)
+
 mongoose.connect(url)
   .then(result => {
     console.log('connected to MongoDB')
@@ -17,7 +19,6 @@ const noteSchema = new mongoose.Schema({
   important: Boolean,
 })
 
-const Note = mongoose.model('Note', noteSchema)
 noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
@@ -25,4 +26,5 @@ noteSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
 module.exports = mongoose.model('Note', noteSchema)
